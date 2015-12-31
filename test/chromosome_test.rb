@@ -1,5 +1,5 @@
 require_relative '../lib/chromosome'
-require 'minitest/test'
+require 'minitest/autorun'
 
 class ChromosomeTest < Minitest::Test
 
@@ -21,5 +21,5 @@ class ChromosomeTest < Minitest::Test
     end
   end
 
-  
+
 end

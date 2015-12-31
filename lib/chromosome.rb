@@ -12,4 +12,21 @@ class Chromosome
     end
   end
 
+  def mutate(mutate_rate, mutate_max)
+    dna.map! do |bp|
+      s = rand(0.0 .. 1.0)
+      yield(bp) if s < mutate_rate
+    end
+  end
+
+  def bit_flip
+    lambda do |bp|
+      if bp == 0
+        1
+      elsif bp == 1
+        0
+      end
+    end
+  end
+
 end
