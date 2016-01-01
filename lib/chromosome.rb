@@ -1,9 +1,11 @@
-class Chromosome
+require_relative 'fitness_functions'
 
-  attr_reader :dna
+class Chromosome
+  attr_reader :dna, :fitness_function
 
   def initialize(opts) #
     @dna = opts[:dna] || rand_dna(opts[:range], opts[:count])
+    @fitness_function = opts[:fitness]
   end
 
   def rand_dna(range, n)
@@ -12,15 +14,29 @@ class Chromosome
     end
   end
 
-  def mutate(mutate_rate, mutate_max)
+  def mutate(mutate_rate, mutate_max, mutation_block)
     dna.map! do |bp|
       s = rand(0.0 .. 1.0)
-      yield(bp) if s < mutate_rate
+      if s < mutate_rate
+        mutation_block[mutate_max, bp]
+      else
+        bp
+      end
     end
   end
 
+  def fitness
+    fitness_function[dna]
+  end
+
+  # def dist_to_ones
+  #   Proc.new do |dna|
+  #     dna.length - dna.reduce(&:+)
+  #   end
+  # end
+
   def bit_flip
-    lambda do |bp|
+   Proc.new do |_, bp|
       if bp == 0
         1
       elsif bp == 1
@@ -29,4 +45,9 @@ class Chromosome
     end
   end
 
+  def add_rand
+    Proc.new do |mutate_max, bp|
+      bp + rand(-1.0..1.0) * mutate_max
+    end
+  end
 end
