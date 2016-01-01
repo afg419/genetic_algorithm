@@ -6,7 +6,6 @@ class Chromosome
   def initialize(opts) #
     @dna = opts[:dna] || rand_dna(opts[:range], opts[:count])
     @fitness_function = opts[:fitness]
-    @mutation_function = opts[:mutate]
   end
 
   def rand_dna(range, n)
@@ -30,19 +29,19 @@ class Chromosome
     fitness_function[dna]
   end
 
-  # def bit_flip
-  #  Proc.new do |_, bp|
-  #     if bp == 0
-  #       1
-  #     elsif bp == 1
-  #       0
-  #     end
-  #   end
-  # end
-  #
-  # def add_rand
-  #   Proc.new do |mutate_max, bp|
-  #     bp + rand(-1.0..1.0) * mutate_max
-  #   end
-  # end
+  def bit_flip
+   Proc.new do |_, bp|
+      if bp == 0
+        1
+      elsif bp == 1
+        0
+      end
+    end
+  end
+
+  def add_rand
+    Proc.new do |mutate_max, bp|
+      bp + rand(-1.0..1.0) * mutate_max
+    end
+  end
 end

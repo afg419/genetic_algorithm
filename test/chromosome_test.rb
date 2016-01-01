@@ -28,12 +28,9 @@ class ChromosomeTest < Minitest::Test
 
   def test_initializes_with_fitness_from_mod
     c = Chromosome.new(dna: [1,1], fitness: FitnessFunctions::euc_dist_to_origin)
-    assert_equal (2**(0.5))/2, c.fitness
+    assert_equal 2**(0.5), c.fitness
   end
 
-  def test_initializes
-
-  end
 
   def test_bit_flip
     c = Chromosome.new(dna: [])
