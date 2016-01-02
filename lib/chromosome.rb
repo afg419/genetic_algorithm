@@ -18,10 +18,10 @@ class Chromosome
     end
   end
 
-  def mutate(opts = {rate: 0})
+  def mutate(opts = {m_rate: 0})
     dna.map! do |bp|
       s = rand(0.0 .. 1.0)
-      if s < opts[:rate]
+      if s < opts[:m_rate]
         mutation_type[bp, opts]
       else
         bp

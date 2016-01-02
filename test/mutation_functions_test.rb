@@ -12,7 +12,7 @@ class MutationTest < Minitest::Test
   end
 
   def test_adds_rand
-    a = Array.new(4,0).map { Mutation.add_rand[0, max: 5]}
+    a = Array.new(4,0).map { Mutation.add_rand[0, m_max: 5]}
 
     a.each_with_index do |i, num|
       assert -5 <= num && num <= 5

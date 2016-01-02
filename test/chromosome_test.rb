@@ -36,7 +36,7 @@ class ChromosomeTest < Minitest::Test
     c = Chromosome.new(dna: [], mutation: Mutation.add_rand)
 
     10.times do
-      x = c.mutation_type[1 ,max: 5]
+      x = c.mutation_type[1, m_max: 5]
       assert -4 <= x && x <= 6
     end
   end
@@ -50,15 +50,15 @@ class ChromosomeTest < Minitest::Test
 
   def test_bit_flip_mutation
     c = Chromosome.new(dna: [1,0,0,1,0])
-    c.mutate(rate: 1)
+    c.mutate(m_rate: 1)
 
     assert_equal [0,1,1,0,1], c.dna
 
-    c.mutate(rate: 0)
+    c.mutate(m_rate: 0)
 
     assert_equal [0,1,1,0,1], c.dna
 
-    c.mutate(rate: 0.5)
+    c.mutate(m_rate: 0.5)
 
     c.dna.each do |bp|
       assert [1,0].include?(bp)
@@ -67,7 +67,7 @@ class ChromosomeTest < Minitest::Test
 
   def test_add_rand_mutation
     c = Chromosome.new(dna: [0,0,0,0,0])
-    c.mutate(rate: 1.5, max: 5)
+    c.mutate(m_rate: 1.5, m_max: 5)
 
     c.dna.each do |bp|
       refute bp == 0
@@ -75,14 +75,14 @@ class ChromosomeTest < Minitest::Test
     end
 
     c = Chromosome.new(dna: [1,1,1,1,1])
-    c.mutate(rate: 1.5, max: 5)
+    c.mutate(m_rate: 1.5, m_max: 5)
     c.dna.each do |bp|
       refute bp == 1
       assert -6 <= bp && bp <= 6
     end
 
     c = Chromosome.new(dna: [0,0,0,0,0])
-    c.mutate(rate: 0, max: 5)
+    c.mutate(m_rate: 0, m_max: 5)
     c.dna.all? {|bp| bp == 0}
   end
 end

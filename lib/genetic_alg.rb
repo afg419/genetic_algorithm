@@ -1,6 +1,6 @@
 class GeneticAlgorithm
 
-  attr_reader :population, :built_by
+  attr_reader :population, :built_by, :fitness_threshold
 
   def initialize(opts)
     # total: ?, selection: ?, crossover: ?, fitness: ? , mutation: ?, range: ? count: ?, threshold: ?
