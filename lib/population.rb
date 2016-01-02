@@ -8,7 +8,7 @@ class Population
   def initialize(opts)
     @chromosomes = opts[:chromosomes] || rand_chromosomes(opts)
     @selection_mechanic = opts[:selection] || Selection.tournament
-    @crossover_combinator = opts[:crossover]
+    @crossover_combinator = opts[:crossover] || Crossover.single_point
   end
 
   def rand_chromosomes(opts)

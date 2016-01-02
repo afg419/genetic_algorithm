@@ -60,4 +60,35 @@ class PopulationTest < Minitest::Test
     pop = Population.new(chromosomes: [c1,c2,c3,c4], selection: id_selector)
     assert pop.chromosomes, pop.selection
   end
+
+  def test_initializes_with_single_point_crossover_by_default
+    c1 = Chromosome.new(dna:[0,1,1])
+    c2 = Chromosome.new(dna:[1,0,1])
+    c3 = Chromosome.new(dna:[1,1,1])
+    c4 = Chromosome.new(dna:[0,0,1])
+
+    pop = Population.new(chromosomes: [c1,c2,c3,c4])
+
+    os1, os2 = pop.crossover( c1, c2, rate: 1, cut_point:1 )
+    e1, e2 = [0,0,1], [1,1,1]
+
+    assert_equal e1, os1.dna
+    assert_equal e2, os2.dna
+  end
+
+  def test_initializes_with_given_crossover_combinator
+    c1 = Chromosome.new(dna:[0,1,1])
+    c2 = Chromosome.new(dna:[1,0,1])
+    c3 = Chromosome.new(dna:[1,1,1])
+    c4 = Chromosome.new(dna:[0,0,1])
+
+    pop = Population.new(chromosomes: [c1,c2,c3,c4], crossover: Crossover.random_rate)
+
+    os1, os2 = pop.crossover( c1, c2, rate: 1)
+    e1, e2 = [1,0,1], [0,1,1]
+
+    assert_equal e1, os1.dna
+    assert_equal e2, os2.dna
+  end
+
 end
