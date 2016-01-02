@@ -34,4 +34,12 @@ class PopulationTest < Minitest::Test
     end
   end
 
+  def test_tournament_selection
+    pop = Population.new(total: 6, range: (0..1), count: 5, fitness: FitnessFunctions::dist_to_ones)
+
+    p pop.chromosomes.map{|chrom| chrom.dna}
+    p pop.tournament_selection(2).map {|chrom| chrom.dna}
+
+  end
+
 end

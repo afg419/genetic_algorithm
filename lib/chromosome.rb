@@ -5,7 +5,7 @@ class Chromosome
 
   def initialize(opts) #
     @dna = opts[:dna] || rand_dna(opts[:range], opts[:count])
-    @fitness_function = opts[:fitness]
+    @fitness_function = opts[:fitness] || Proc.new {|dna| dna.reduce(&:+)}
   end
 
   def rand_dna(range, n)

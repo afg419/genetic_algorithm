@@ -5,7 +5,4 @@ class GeneticAlgorithm
   def initialize(opts)
     @population = opts[:population] || Population.new(opts[:range], opts[:count], opts[:total])
   end
-
-  
-
 end
