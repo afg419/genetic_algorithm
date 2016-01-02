@@ -17,6 +17,7 @@ class PopulationTest < Minitest::Test
     assert_equal 10, pop.chromosomes.length
     pop.chromosomes.each do |chromo|
       assert_equal [1,2,3,4], chromo.dna
+      assert Chromosome, chromo.class
     end
   end
 
@@ -34,12 +35,29 @@ class PopulationTest < Minitest::Test
     end
   end
 
-  def test_tournament_selection
-    pop = Population.new(total: 6, range: (0..1), count: 5, fitness: FitnessFunctions::dist_to_ones)
+  def test_initializes_with_tournament_selection_by_default
+    c1 = Chromosome.new(dna:[0,1,1])
+    c2 = Chromosome.new(dna:[1,0,1])
+    c3 = Chromosome.new(dna:[1,1,1])
+    c4 = Chromosome.new(dna:[0,0,1])
 
-    p pop.chromosomes.map{|chrom| chrom.dna}
-    p pop.tournament_selection(2).map {|chrom| chrom.dna}
+    pop = Population.new(chromosomes: [c1,c2,c3,c4])
 
+    assert_equal Proc, pop.selection_mechanic.class
+    assert_equal Array.new(4,[1,1,1]), pop.selection(n:5).map{|x| x.dna}
   end
 
+  def test_initializes_with_given_selection_mechanic
+    c1 = Chromosome.new(dna:[0,1,1])
+    c2 = Chromosome.new(dna:[1,0,1])
+    c3 = Chromosome.new(dna:[1,1,1])
+    c4 = Chromosome.new(dna:[0,0,1])
+
+    id_selector = Proc.new {|chromosomes, opts|
+      chromosomes
+    }
+
+    pop = Population.new(chromosomes: [c1,c2,c3,c4], selection: id_selector)
+    assert pop.chromosomes, pop.selection
+  end
 end
