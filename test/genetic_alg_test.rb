@@ -75,7 +75,21 @@ class GeneticAlgorithmTest < Minitest::Test
 
     ga2 = GeneticAlgorithm.new(binary_opts(140, 30, 0))
 
+    assert_equal 140, ga2.population.chromosomes.count
 
+    sample_chrom = ga2.population.chromosomes.sample
+
+    assert_equal 30, sample_chrom.dna.count
+
+    sample_chrom.dna.each do |bp|
+      assert [0,1].include?(bp)
+    end
+
+    sample_chrom.mutate(ga2.built_by)
+
+    sample_chrom.dna.each do |bp|
+      assert [0,1].include?(bp)
+    end
   end
 
 end
