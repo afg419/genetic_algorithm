@@ -67,7 +67,7 @@ class GeneticAlgorithmTest < Minitest::Test
       assert -1 <= bp && bp <= 1
     end
 
-    sample_chrom.mutate(ga1.built_by)
+    sample_chrom.mutate
 
     sample_chrom.dna.each do |bp|
       assert (-6.0 <= bp && bp <= 6.0)
@@ -85,7 +85,7 @@ class GeneticAlgorithmTest < Minitest::Test
       assert [0,1].include?(bp)
     end
 
-    sample_chrom.mutate(ga2.built_by)
+    sample_chrom.mutate
 
     sample_chrom.dna.each do |bp|
       assert [0,1].include?(bp)

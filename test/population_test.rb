@@ -41,10 +41,10 @@ class PopulationTest < Minitest::Test
     c3 = Chromosome.new(dna:[1,1,1])
     c4 = Chromosome.new(dna:[0,0,1])
 
-    pop = Population.new(chromosomes: [c1,c2,c3,c4])
+    pop = Population.new(chromosomes: [c1,c2,c3,c4], selection: Selection.tournament, n:5)
 
     assert_equal Proc, pop.selection_mechanic.class
-    assert_equal Array.new(4,[1,1,1]), pop.selection(n:5).map{|x| x.dna}
+    assert_equal Array.new(4,[1,1,1]), pop.selection.map{|x| x.dna}
   end
 
   def test_initializes_with_given_selection_mechanic
@@ -67,9 +67,13 @@ class PopulationTest < Minitest::Test
     c3 = Chromosome.new(dna:[1,1,1])
     c4 = Chromosome.new(dna:[0,0,1])
 
-    pop = Population.new(chromosomes: [c1,c2,c3,c4])
+    params = {chromosomes: [c1,c2,c3,c4], crossover: Crossover.single_point,
+                                             c_rate: 1,
+                                          cut_point: 1}
 
-    os1, os2 = pop.crossover( c1, c2, rate: 1, cut_point:1 )
+    pop = Population.new(params)
+
+    os1, os2 = pop.crossover(c1, c2)
     e1, e2 = [0,0,1], [1,1,1]
 
     assert_equal e1, os1.dna
@@ -82,9 +86,9 @@ class PopulationTest < Minitest::Test
     c3 = Chromosome.new(dna:[1,1,1])
     c4 = Chromosome.new(dna:[0,0,1])
 
-    pop = Population.new(chromosomes: [c1,c2,c3,c4], crossover: Crossover.random_rate)
+    pop = Population.new(chromosomes: [c1,c2,c3,c4], crossover: Crossover.random_rate, c_rate: 1)
 
-    os1, os2 = pop.crossover( c1, c2, rate: 1)
+    os1, os2 = pop.crossover(c1, c2)
     e1, e2 = [1,0,1], [0,1,1]
 
     assert_equal e1, os1.dna
