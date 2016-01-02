@@ -1,14 +1,16 @@
-module FitnessFunctions
-  def self.dist_to_ones
+module Fitness
+  def self.taxi_dist(array)
     Proc.new do |dna|
-      -dna.length + dna.reduce(&:+)
+      dna.each_index.reduce(0) do |acc, i|
+        acc + (array[i] - dna[i]).abs
+      end
     end
   end
 
-  def self.euc_dist_to_origin
+  def self.euc_dist(array)
     Proc.new do |dna|
-      dna.reduce(0) do |acc, bp|
-        acc + bp**2
+      dna.each_index.reduce(0) do |acc, i|
+        acc + (array[i]-dna[i])**2
       end**(0.5)
     end
   end

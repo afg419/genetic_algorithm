@@ -22,53 +22,52 @@ class ChromosomeTest < Minitest::Test
   end
 
   def test_initializes_with_fitness_function
-    c = Chromosome.new(dna: [1,2,3,1], fitness: Proc.new {|dna| dna.length})
-    assert_equal 4, c.fitness
+    c = Chromosome.new(dna: [1,2,3,1], fitness: Fitness.euc_dist([0,3,2,1]))
+    assert_equal 3**(0.5), c.fitness
   end
 
-  def test_initializes_with_fitness_from_mod
-    c = Chromosome.new(dna: [1,1], fitness: FitnessFunctions::euc_dist_to_origin)
-    assert_equal 2**(0.5), c.fitness
+  def test_initializes_with_taxi_dist_to_origin_by_default
+    c = Chromosome.new(dna: [1,1])
+    assert_equal 2, c.fitness
   end
 
 
-  def test_bit_flip
+  def test_initializes_with_mutation_function
+    c = Chromosome.new(dna: [], mutation: Mutation.add_rand)
+
+    10.times do
+      x = c.mutation_type[1 ,max: 5]
+      assert -4 <= x && x <= 6
+    end
+  end
+
+  def test_initializes_with_bit_flip_mutation_by_default
     c = Chromosome.new(dna: [])
 
-    assert_equal 1, c.bit_flip["_",0]
-    assert_equal 0, c.bit_flip["_",1]
+    assert_equal 0 , c.mutation_type[1]
+    assert_equal 1 , c.mutation_type[0]
   end
 
   def test_bit_flip_mutation
     c = Chromosome.new(dna: [1,0,0,1,0])
-    c.mutate(1.5,6,c.bit_flip)
+    c.mutate(rate: 1)
 
     assert_equal [0,1,1,0,1], c.dna
 
-    c.mutate(0,6,c.bit_flip)
+    c.mutate(rate: 0)
 
     assert_equal [0,1,1,0,1], c.dna
 
-    c.mutate(0.5,6,c.bit_flip)
+    c.mutate(rate: 0.5)
 
-    p c.dna
     c.dna.each do |bp|
       assert [1,0].include?(bp)
     end
   end
 
-  def test_add_rand
-    c = Chromosome.new(dna: [])
-
-    10.times do
-      r = c.add_rand[10,0]
-      assert -10 <= r && r <= 10
-    end
-  end
-
   def test_add_rand_mutation
     c = Chromosome.new(dna: [0,0,0,0,0])
-    c.mutate(1.5, 5, c.add_rand)
+    c.mutate(rate: 1.5, max: 5)
 
     c.dna.each do |bp|
       refute bp == 0
@@ -76,19 +75,14 @@ class ChromosomeTest < Minitest::Test
     end
 
     c = Chromosome.new(dna: [1,1,1,1,1])
-    c.mutate(1.5, 5 , c.add_rand)
+    c.mutate(rate: 1.5, max: 5)
     c.dna.each do |bp|
       refute bp == 1
       assert -6 <= bp && bp <= 6
     end
 
     c = Chromosome.new(dna: [0,0,0,0,0])
-    c.mutate(0, 5, c.add_rand)
+    c.mutate(rate: 0, max: 5)
     c.dna.all? {|bp| bp == 0}
-  end
-
-  def test_dist_from_all_ones
-    c = Chromosome.new(dna: [1,1,0,1,0], fitness: FitnessFunctions::dist_to_ones)
-    assert_equal 2, c.fitness
   end
 end

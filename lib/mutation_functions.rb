@@ -1,19 +1,13 @@
 module Mutation
-
   def self.bit_flip
-   Proc.new do |_, bp|
-      if bp == 0
-        1
-      elsif bp == 1
-        0
-      end
+    Proc.new do |x|
+      {0 => 1, 1 => 0}[x]
     end
   end
 
   def self.add_rand
-    Proc.new do |mutate_max, bp|
-      bp + rand(-1.0..1.0) * mutate_max
+    Proc.new do |bp, opts|
+      bp + rand(-1.0..1.0) * opts[:max]
     end
   end
-
 end
