@@ -9,32 +9,40 @@ class GeneticAlgorithm
     @built_by = opts
   end
 
-  def breed_generation(opts)
-    parent_population = population.selection(opts)
+  def breed_generation
+    binding.pry
+
+    parent_population = population.selection
+
+    binding.pry
 
     child_population = parent_population.each_slice(2).to_a.map do |ch1, ch2|
-      population.crossover(ch1,ch2,opts)
+      population.crossover(ch1,ch2)
     end.flatten
 
+    binding.pry
+
     new_generation = child_population.map do |chrom|
-      chrom.mutate(opts)
+      chrom.mutate
     end
 
-    @population = Population.new(@population.built_by.merge(chromosomes: new_generation))
+    binding.pry
+
+    @population.chromosomes = new_generation
   end
 
   def fittest_chromosome
     population.chromosomes.max_by {|chrom| chrom.fitness}
   end
 
-  def perfect_fitness?
-    fittest_chromosome >= fitness_threshold
+  def sufficient_fitness?
+    fittest_chromosome.fitness >= fitness_threshold
   end
 
-  def run(n, opts)
+  def evolve(n)
     n.times do
-      break if perfect_fitness?
-      breed_generation(opts)
+      break if sufficient_fitness?
+      breed_generation
     end
     fittest_chromosome
   end

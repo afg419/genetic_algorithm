@@ -3,7 +3,8 @@ require_relative 'crossover_functions'
 require_relative 'selection_functions'
 
 class Population
-  attr_reader :chromosomes, :selection_mechanic, :crossover_combinator, :built_by
+  attr_reader :selection_mechanic, :crossover_combinator, :built_by
+  attr_accessor :chromosomes
 
   def initialize(opts)
     @chromosomes = opts[:chromosomes] || rand_chromosomes(opts)

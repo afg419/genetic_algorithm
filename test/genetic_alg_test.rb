@@ -14,7 +14,7 @@ class GeneticAlgorithmTest < Minitest::Test
       n: 10,
       crossover: Crossover.random_rate,
       c_rate: 1,
-      fitness: Fitness.euc_dist(Array.new(count,0)),
+      fitness: Fitness.euc_dist(Array.new(count, 0)),
       mutation: Mutation.add_rand,
       m_rate: 1,
       m_max: 5
@@ -31,7 +31,7 @@ class GeneticAlgorithmTest < Minitest::Test
       n: 10,
       crossover: Crossover.single_point,
       c_rate: 1,
-      fitness: Fitness.taxi_dist(Array.new(count,0)),
+      fitness: Fitness.taxi_dist(Array.new(count, 0)),
       mutation: Mutation.bit_flip,
       m_rate: 1
     }
@@ -90,6 +90,23 @@ class GeneticAlgorithmTest < Minitest::Test
     sample_chrom.dna.each do |bp|
       assert [0,1].include?(bp)
     end
+  end
+
+  def test_ids_fittest_chromosome
+    ga = GeneticAlgorithm.new(binary_opts(140, 30, 0))
+    c = Chromosome.new(binary_opts(140, 30, 0).merge(dna: Array.new(30,1)))
+    ga.population.chromosomes << c
+
+    assert_equal c, ga.fittest_chromosome
+  end
+
+  def test_evolution
+    ga = GeneticAlgorithm.new(binary_opts(140, 50, 50))
+
+
+    binding.pry
+    ga.evolve(100)
+    binding.pry
   end
 
 end
