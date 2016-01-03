@@ -10,23 +10,16 @@ class GeneticAlgorithm
   end
 
   def breed_generation
-    binding.pry
-
     parent_population = population.selection
-
-    binding.pry
 
     child_population = parent_population.each_slice(2).to_a.map do |ch1, ch2|
       population.crossover(ch1,ch2)
     end.flatten
 
-    binding.pry
-
     new_generation = child_population.map do |chrom|
       chrom.mutate
+      chrom
     end
-
-    binding.pry
 
     @population.chromosomes = new_generation
   end

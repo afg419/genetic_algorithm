@@ -101,12 +101,34 @@ class GeneticAlgorithmTest < Minitest::Test
   end
 
   def test_evolution
-    ga = GeneticAlgorithm.new(binary_opts(140, 50, 50))
+    good_rates = {c_rate: 0.55, m_rate: 0.03}
+    good_binary_opts = binary_opts(140, 50, 50).merge(good_rates)
 
 
-    binding.pry
-    ga.evolve(100)
-    binding.pry
+    5.times do
+      ga = GeneticAlgorithm.new(good_binary_opts)
+      init = ga.fittest_chromosome.fitness
+      ga.evolve(25)
+      fin = ga.fittest_chromosome.fitness
+      p "init_fit: #{init}, fin_fit: #{fin}"
+    end
+  end
+
+  def find_best_parameters
+    c_rates = (0..20).to_a.map { |x| x*5/(100.to_f) }
+    m_rates = (0..10).to_a.map { |x| x/(100.to_f) }
+
+    c_rates.each do |c|
+      m_rates.each do |m|
+        good_rates = {c_rate: c, m_rate: m}
+        good_binary_opts = binary_opts(140, 50, 50).merge(good_rates)
+        ga = GeneticAlgorithm.new(good_binary_opts)
+        init = ga.fittest_chromosome.fitness
+        ga.evolve(25)
+        fin = ga.fittest_chromosome.fitness
+        p "c_rate:#{c}, m_rate:#{m}, init_fit: #{init}, fin_fit: #{fin}"
+      end
+    end
   end
 
 end

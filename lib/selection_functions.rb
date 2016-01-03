@@ -3,7 +3,7 @@ module Selection
   def self.tournament
     Proc.new do |chromosomes, opts|
       chromosomes.map do
-        chromosomes[0..opts[:n]-1].shuffle.max_by {|chrom| chrom.fitness}
+        chromosomes.shuffle[0..opts[:n]-1].max_by {|chrom| chrom.fitness}
       end
     end
   end
