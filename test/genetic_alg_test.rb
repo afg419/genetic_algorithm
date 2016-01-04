@@ -131,8 +131,25 @@ class GeneticAlgorithmTest < Minitest::Test
       init = ga.fittest_chromosome
       ga.evolve(25)
       fin = ga.fittest_chromosome
+
+      assert_equal (Array.new(25,0) + Array.new(25,1)), fin.dna
       puts "fin_fit: #{fin.dna}"
     end
+
+    fourth_opts = good_binary_opts.merge(fitness: Fitness.summation_dist( (Array.new(25,1) + Array.new(25,0)).shuffle))
+
+    5.times do
+      ga = GeneticAlgorithm.new(fourth_opts)
+      init = ga.fittest_chromosome
+      ga.evolve(25)
+      fin = ga.fittest_chromosome
+
+      expected = [Array.new(50,0), Array.new(50,1)]
+
+      assert expected.include?(fin.dna)
+      puts "fin_fit: #{fin.dna}"
+    end
+
   end
 
   def find_best_parameters
