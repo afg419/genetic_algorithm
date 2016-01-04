@@ -104,13 +104,34 @@ class GeneticAlgorithmTest < Minitest::Test
     good_rates = {c_rate: 0.55, m_rate: 0.03}
     good_binary_opts = binary_opts(140, 50, 50).merge(good_rates)
 
-
     5.times do
       ga = GeneticAlgorithm.new(good_binary_opts)
-      init = ga.fittest_chromosome.fitness
+      init = ga.fittest_chromosome
       ga.evolve(25)
-      fin = ga.fittest_chromosome.fitness
-      p "init_fit: #{init}, fin_fit: #{fin}"
+      fin = ga.fittest_chromosome
+      assert_equal Array.new(50,1), fin.dna
+      p "init_fit: #{init.fitness}, fin_fit: #{fin.fitness}"
+    end
+
+    second_opts = good_binary_opts.merge(fitness: Fitness.taxi_dist(Array.new(50, 1)))
+
+    5.times do
+      ga = GeneticAlgorithm.new(second_opts)
+      init = ga.fittest_chromosome
+      ga.evolve(25)
+      fin = ga.fittest_chromosome
+      assert_equal Array.new(50,0), fin.dna
+      p "init_fit: #{init.fitness}, fin_fit: #{fin.fitness}"
+    end
+
+    third_opts = good_binary_opts.merge(fitness: Fitness.taxi_dist( (Array.new(25,1) + Array.new(25,0))))
+
+    5.times do
+      ga = GeneticAlgorithm.new(third_opts)
+      init = ga.fittest_chromosome
+      ga.evolve(25)
+      fin = ga.fittest_chromosome
+      puts "fin_fit: #{fin.dna}"
     end
   end
 

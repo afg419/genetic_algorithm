@@ -7,6 +7,8 @@ module Fitness
     end
   end
 
+  def self.
+
   def self.euc_dist(array)
     Proc.new do |dna|
       dna.each_index.reduce(0) do |acc, i|
