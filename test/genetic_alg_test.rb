@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/genetic_alg'
 require_relative '../lib/population'
+require 'pry'
 
 class GeneticAlgorithmTest < Minitest::Test
 
@@ -100,7 +101,7 @@ class GeneticAlgorithmTest < Minitest::Test
     assert_equal c, ga.fittest_chromosome
   end
 
-  def test_evolution
+  def test_binary_chromosome_evolution
     good_rates = {c_rate: 0.55, m_rate: 0.03}
     good_binary_opts = binary_opts(140, 50, 50).merge(good_rates)
 
@@ -152,21 +153,39 @@ class GeneticAlgorithmTest < Minitest::Test
 
   end
 
+  def test_real_number_evolution
+    good_rates = {c_rate: 0.35, m_rate: 0.24}
+    good_neural_opts = neural_opts(140, 30,(-1.0..1.0), 100).merge(good_rates)
+
+    5.times do
+      ga = GeneticAlgorithm.new(good_neural_opts)
+      init = ga.fittest_chromosome
+      ga.evolve(25)
+      fin = ga.fittest_chromosome
+      assert 100 < fin.fitness
+      p "init_fit: #{init.fitness}, fin_fit: #{fin.fitness}"
+      puts fin.dna
+    end
+  end
+
   def find_best_parameters
-    c_rates = (0..20).to_a.map { |x| x*5/(100.to_f) }
-    m_rates = (0..10).to_a.map { |x| x/(100.to_f) }
+    c_rates = (0..10).to_a.map { |x| 0.25 + x*5/(100.to_f) }
+    m_rates = (0..10).to_a.map { |x| 0.2 + x/(100.to_f) }
+
+    params = []
 
     c_rates.each do |c|
       m_rates.each do |m|
         good_rates = {c_rate: c, m_rate: m}
-        good_binary_opts = binary_opts(140, 50, 50).merge(good_rates)
-        ga = GeneticAlgorithm.new(good_binary_opts)
+        good_neural_opts = neural_opts(140, 30,(-1.0..1.0), 100).merge(good_rates)
+        ga = GeneticAlgorithm.new(good_neural_opts)
         init = ga.fittest_chromosome.fitness
         ga.evolve(25)
         fin = ga.fittest_chromosome.fitness
         p "c_rate:#{c}, m_rate:#{m}, init_fit: #{init}, fin_fit: #{fin}"
+        params << [c, m, ga.fittest_chromosome]
       end
     end
+    p params.sort_by{|x| -x[2].fitness}[0..10].map{|x| [x[0],x[1],x[2].fitness]}
   end
-
 end

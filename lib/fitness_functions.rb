@@ -20,4 +20,6 @@ module Fitness
       end**(0.5)
     end
   end
+
+  
 end

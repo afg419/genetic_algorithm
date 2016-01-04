@@ -68,23 +68,28 @@ class ChromosomeTest < Minitest::Test
   end
 
   def test_add_rand_mutation
-    c = Chromosome.new(dna: [0,0,0,0,0], m_rate: 1.5, m_max: 5)
+    c = Chromosome.new(dna: [0,0,0,0,0], mutation: Mutation.add_rand, m_rate: 1.5, m_max: 5)
     c.mutate
 
     c.dna.each do |bp|
       refute bp == 0
+      puts bp
       assert -5 <= bp && bp <= 5
     end
 
-    c = Chromosome.new(dna: [1,1,1,1,1],m_rate: 1.5, m_max: 5)
+    c = Chromosome.new(dna: [1,1,1,1,1], mutation: Mutation.add_rand, m_rate: 1.5, m_max: 5)
     c.mutate
+
     c.dna.each do |bp|
       refute bp == 1
+      puts bp
       assert -6 <= bp && bp <= 6
     end
 
-    c = Chromosome.new(dna: [0,0,0,0,0],m_rate: 0, m_max: 5)
+    c = Chromosome.new(dna: [0,0,0,0,0], mutation: Mutation.add_rand, m_rate: 0, m_max: 5)
     c.mutate
-    c.dna.all? {|bp| bp == 0}
+    c.dna.all? do |bp|
+      bp == 0
+    end
   end
 end
