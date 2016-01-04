@@ -25,3 +25,4 @@ Once options are chosen, we can evolve the population and examine the best perfo
 - `ga.fittest_chromosome.dna`
 
 
+To add customized selection, crossover, fitness, and mutation functions, simply open the relevant functions file, e.g. selection_functions.rb, and write the desired function as a proc.  These files include basic examples for each as is.  Feel free to make pull requests as functions are added.
